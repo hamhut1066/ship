@@ -1,3 +1,4 @@
+;; tests need to be written at some point...
 (ns ship-test
   (:require [clojure.test :refer :all]
             [ship :refer :all]))

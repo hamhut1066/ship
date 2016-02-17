@@ -2,20 +2,12 @@
   (:require
    [clj-http.client :as client]
    [clojure.data.json :as json]
-   [schema.core :as s]))
+   ))
 (require '[clojure.core.match :refer [match]])
 
 ;; constants
 (def base_url "https://api.realartists.com/api/")
 (def api_version "20151105")
-
-;; Schemas
-;; TODO: figure out how to implement these properly
-(def User
-  "User Schema"
-  {"identifier" s/Str
-   "name" s/Str
-   "email" s/Str})
 
 ;; helpers
 (defn body [request]
