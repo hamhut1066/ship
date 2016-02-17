@@ -95,18 +95,6 @@
   "Returns a list of the child components of the target component"
   (components token {:predicate (str "parent.identifier = " (identifier component))}))
 
-;; (defn milestones_active [token & [milestone]]
-;;   (if (nil? milestone)
-;;     (milestones token {:predicate
-;;                 "(StartDate == nil || StartDate < NOW()) AND (EndDate == nil || EndDate > NOW())"})
-;;     (let [within_component (if (string? milestone)
-;;                              (get (get (components token {:predicate (str "identifier = " milestone)}) 0) :fullName)
-;;                              milestone)]
-;;       (milestones token {:predicate
-;;                          (str "(StartDate == nil || StartDate < NOW())"
-;;                               "AND (EndDate == nil || EndDate > NOW())"
-;;                               "AND (component.identifier == nil OR ")")}))))
-
 (defn states_initial [token]
   "Returns the states that are initial"
   (states token {:predicate "Initial = YES"}))
