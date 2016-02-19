@@ -1,8 +1,7 @@
 (ns ship
   (:require
    [org.httpkit.client :as client]
-   [clojure.data.json :as json]
-   ))
+   [clojure.data.json :as json]))
 (require '[clojure.core.match :refer [match]])
 
 ;; constants
@@ -24,29 +23,22 @@
 (defn- construct_url [endpoint]
   (str base_url api_version "/" endpoint))
 
-(defn- headers [token] {:Authorization (str "Ship " token) })
+(defn- headers [token] {:Authorization (str "Ship " token)})
 (defn- post_headers [token] = (headers token))
 (defn- meta_data
-  ([token] {
-            :headers (headers token)
+  ([token] {:headers (headers token)
             :insecure? true})
   ([token form params]
-   (let [core {
-               :insecure? true
-               :headers (merge (post_headers token) {"Content-Type" "application/json"})
-               }
+   (let [core {:insecure? true
+               :headers (merge (post_headers token) {"Content-Type" "application/json"})}
          payload (match [form]
-                        [:get] {
-                                :query-params params
-                                :content-type :json
-                                }
-                        [:put] {
-                                :accept :json
-                                :body (json/write-str params)}
-                        [:delete] {}
-                        :else {
-                               :body (if (or (string? params) (nil? params)) params (json/write-str params))
-                               :headers (post_headers token)})]
+                   [:get] {:query-params params
+                           :content-type :json}
+                   [:put] {:accept :json
+                           :body (json/write-str params)}
+                   [:delete] {}
+                   :else {:body (if (or (string? params) (nil? params)) params (json/write-str params))
+                          :headers (post_headers token)})]
      (merge core payload))))
 (defn- debug [heads] (merge heads {:debug true :save-request? true}))
 
@@ -65,9 +57,9 @@
       (sync-call client/get ~(construct_url (str url "/search")) (meta_data token# :get pred#)))
      ([token# method# pred# & [id#]]
       (match [method#]
-             [:new] (sync-call client/post ~(construct_url url) (meta_data token# :post pred#))
-             [:update] (sync-call client/patch (construct_url (str ~url "/" id#)) (meta_data token# :post pred#))
-             :else "Unsupported value"))))
+        [:new] (sync-call client/post ~(construct_url url) (meta_data token# :post pred#))
+        [:update] (sync-call client/patch (construct_url (str ~url "/" id#)) (meta_data token# :post pred#))
+        :else "Unsupported value"))))
 
 (def-resource users "users")
 (def-resource components "components")
@@ -80,9 +72,11 @@
 ;; keyword definitions
 (defn problem_keyword_set [token identifier keyword & [value]]
   "Update and existing problem and add/update a keyword"
-  (sync-call client/put (construct_url (str "problems/" identifier "/keywords/" keyword)) (meta_data token :put (if (nil? value)
-                                                                                      ""
-                                                                                      value))))
+  (sync-call client/put
+             (construct_url (str "problems/" identifier "/keywords/" keyword))
+             (meta_data token :put (if (nil? value)
+                                     ""
+                                     value))))
 
 (defn problem_keyword_delete [token identifier keyword]
   "delete keyword from problem"
@@ -115,16 +109,14 @@
 (defn state_transition [token state]
   (states token {:predicate (str "ANY PreviousStates.identifier = " (identifier state))}))
 
-
 (defn problem_search [token & {:keys [predicate savedQuery includeDetail] :or {predicate "" savedQuery "" includeDetail nil}}]
   (let
-      [pred (if (clojure.string/blank? predicate) {} {:predicate predicate})
-       query (if (clojure.string/blank? savedQuery) {} {:savedQuery savedQuery})
-       detail (if (nil? includeDetail) {} {:includeDetail true})
-       payload (merge pred query detail)]
+   [pred (if (clojure.string/blank? predicate) {} {:predicate predicate})
+    query (if (clojure.string/blank? savedQuery) {} {:savedQuery savedQuery})
+    detail (if (nil? includeDetail) {} {:includeDetail true})
+    payload (merge pred query detail)]
     (problems token payload)))
 
 (defn unresolved_problems [token]
   "return all unresolved problems"
-  (problems token {:predicate "state.resolved = NO"})
-  )
+  (problems token {:predicate "state.resolved = NO"}))
