@@ -23,7 +23,7 @@
 (defn- construct_url [endpoint]
   (str base_url api_version "/" endpoint))
 
-(defn- headers [token] {:Authorization (str "Ship " token)})
+(defn- headers [token] {"Authorization" (str "Ship " token)})
 (defn- post_headers [token] = (headers token))
 (defn- meta_data
   ([token] {:headers (headers token)
