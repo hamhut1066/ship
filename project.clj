@@ -1,5 +1,5 @@
-(defproject ship "0.1.1"
-  :description "API Wrapper around Shippy"
+(defproject ship "0.1.2"
+  :description "API Wrapper around Ship Issue tracker"
   :url "http://github.com/hamhut1066/ship"
   :license {:name "MIT License"
             :url "https://opensource.org/licenses/MIT"}
