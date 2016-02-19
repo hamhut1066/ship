@@ -1,11 +1,10 @@
-(defproject ship "0.1.0"
+(defproject ship "0.1.1"
   :description "API Wrapper around Shippy"
   :url "http://github.com/hamhut1066/ship"
-  :license {:name "Eclipse Public License"
-            :url "http://www.eclipse.org/legal/epl-v10.html"}
+  :license {:name "MIT License"
+            :url "https://opensource.org/licenses/MIT"}
   :dependencies [
                  [org.clojure/clojure "1.7.0"]
-                 [clj-http "2.0.1"]
                  [http-kit "2.1.19"]
                  [cheshire "5.5.0"]
                  [org.clojure/core.match "0.3.0-alpha4"]
